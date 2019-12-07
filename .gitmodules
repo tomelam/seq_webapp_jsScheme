@@ -1,0 +1,3 @@
+[submodule "jsScheme"]
+	path = jsScheme
+	url = git@github.com:tomelam/jsScheme.git
