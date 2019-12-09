@@ -27,7 +27,7 @@ asynchronous events.
 Then it points out a working example of an application written for a
 continuation-based web server and online resources for learning important
 ideas about such applications. Finally it presents a continuation-based
-web application that runs entirely in the web browser--a single-page
+web application that runs entirely in the web browser&mdash;a single-page
 web application.
 
 
@@ -103,16 +103,16 @@ of the page
 The reader is strongly encouraged to
 [download Racket](https://download.racket-lang.org/), load the
 [the finished Racket Scheme code](https://docs.racket-lang.org/more/step9.txt),
-and run the code--a five- to ten-minute exercise.
+and run the code&mdash;a five- to ten-minute exercise.
 The code can be loaded and run in Racket something like this (where 8080 is
 the port number to which the server responds and "step9.txt" is the full or
 relative pathname of the Racket Scheme code):
 
 ```
-        $ racket
+        $ 𝐫𝐚𝐜𝐤𝐞𝐭
         Welcome to Racket v7.5.
         > (enter! "step9.txt")
-        "step9.txt"> (serve 8080)
+        "step9.txt"> (𝐬𝐞𝐫𝐯𝐞 𝟖𝟎𝟖𝟎)
         #<procedure:...webcon/step9.txt:17:2>
         "step9.txt"> 
 ```
@@ -198,13 +198,13 @@ In the ````Log```` the input will be echoed and ```=> #lambda``` will be
 printed.
 
 ```
-	(define (test)
-	  (with-handlers '((click-handler "symbols"))
-	    (let ((input (get-input)))
-	      (displayln "get-input returned")
-	      (displayln input))))
+        (𝙙𝙚𝙛𝙞𝙣𝙚 (𝙩𝙚𝙨𝙩)
+	  (𝙬𝙞𝙩𝙝-𝙝𝙖𝙣𝙙𝙡𝙚𝙧𝙨 '((𝙘𝙡𝙞𝙘𝙠-𝙝𝙖𝙣𝙙𝙡𝙚𝙧 "𝙨𝙮𝙢𝙗𝙤𝙡𝙨"))
+	    (𝙡𝙚𝙩 ((𝙞𝙣𝙥𝙪𝙩 (𝙜𝙚𝙩-𝙞𝙣𝙥𝙪𝙩)))
+	      (𝙙𝙞𝙨𝙥𝙡𝙖𝙮𝙡𝙣 "𝙜𝙚𝙩-𝙞𝙣𝙥𝙪𝙩 𝙧𝙚𝙩𝙪𝙧𝙣𝙚𝙙")
+	      (𝙙𝙞𝙨𝙥𝙡𝙖𝙮𝙡𝙣 𝙞𝙣𝙥𝙪𝙩))))
 
-	(reset (test))
+	(𝙧𝙚𝙨𝙚𝙩 (𝙩𝙚𝙨𝙩))
 ```
 
 10. Click on the table on the right side of the page. (The table happens

@@ -25,7 +25,7 @@ asynchronous events.
 Then it points out a working example of an application written for a
 continuation-based web server and online resources for learning important
 ideas about such applications. Finally it presents a continuation-based
-web application that runs entirely in the web browser--a single-page
+web application that runs entirely in the web browser—a single-page
 web application.</p>
 <h2>How Asynchronous Events Are Handled in Web Applications</h2>
 <p>Any program, simple or complex, that uses I/O (user I/O, disk reads,
@@ -86,14 +86,14 @@ of the page
 <p>The reader is strongly encouraged to
 <a href="https://download.racket-lang.org/">download Racket</a>, load the
 <a href="https://docs.racket-lang.org/more/step9.txt">the finished Racket Scheme code</a>,
-and run the code--a five- to ten-minute exercise.
+and run the code—a five- to ten-minute exercise.
 The code can be loaded and run in Racket something like this (where 8080 is
 the port number to which the server responds and &quot;step9.txt&quot; is the full or
 relative pathname of the Racket Scheme code):</p>
-<pre><code>        $ racket
+<pre><code>        $ 𝐫𝐚𝐜𝐤𝐞𝐭
         Welcome to Racket v7.5.
         &gt; (enter! &quot;step9.txt&quot;)
-        &quot;step9.txt&quot;&gt; (serve 8080)
+        &quot;step9.txt&quot;&gt; (𝐬𝐞𝐫𝐯𝐞 𝟖𝟎𝟖𝟎)
         #&lt;procedure:...webcon/step9.txt:17:2&gt;
         &quot;step9.txt&quot;&gt; 
 </code></pre>
@@ -180,13 +180,13 @@ In the <code>Log</code> the input will be echoed and <code>=&gt; #lambda</code> 
 printed.</p>
 </li>
 </ol>
-<pre><code>	(define (test)
-	  (with-handlers '((click-handler &quot;symbols&quot;))
-	    (let ((input (get-input)))
-	      (displayln &quot;get-input returned&quot;)
-	      (displayln input))))
+<pre><code>        (𝙙𝙚𝙛𝙞𝙣𝙚 (𝙩𝙚𝙨𝙩)
+	  (𝙬𝙞𝙩𝙝-𝙝𝙖𝙣𝙙𝙡𝙚𝙧𝙨 '((𝙘𝙡𝙞𝙘𝙠-𝙝𝙖𝙣𝙙𝙡𝙚𝙧 &quot;𝙨𝙮𝙢𝙗𝙤𝙡𝙨&quot;))
+	    (𝙡𝙚𝙩 ((𝙞𝙣𝙥𝙪𝙩 (𝙜𝙚𝙩-𝙞𝙣𝙥𝙪𝙩)))
+	      (𝙙𝙞𝙨𝙥𝙡𝙖𝙮𝙡𝙣 &quot;𝙜𝙚𝙩-𝙞𝙣𝙥𝙪𝙩 𝙧𝙚𝙩𝙪𝙧𝙣𝙚𝙙&quot;)
+	      (𝙙𝙞𝙨𝙥𝙡𝙖𝙮𝙡𝙣 𝙞𝙣𝙥𝙪𝙩))))
 
-	(reset (test))
+	(𝙧𝙚𝙨𝙚𝙩 (𝙩𝙚𝙨𝙩))
 </code></pre>
 <ol start="10">
 <li>Click on the table on the right side of the page. (The table happens
@@ -199,5 +199,5 @@ event.) The following will be printed in the <code>Log</code>:</li>
 <ol start="11">
 <li>Click on the table again. Confirm that nothing is added to the <code>Log</code>.
 This is because the click handler is automatically removed after the
-program progresses through the stage where it waits for the click.</li>
+program falls through the <code>with-handlers</code> block.</li>
 </ol>
