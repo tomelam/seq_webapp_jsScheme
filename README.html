@@ -1,150 +1,203 @@
-<h1>Sequential Web Application Demo</h1>
-<p>This project demonstrates a web application programmed sequentially.
-This means its structure mirrors its execution. In this README, we give
-some background on how web applications are typically programmed,
-then compare the structures of a traditional web application and
-a Node.js-style event-driven web application. Then we point the reader
-to a working example of an application written for a continuation-based
-web server and important ideas about the usefulness of such applications.
-Finally we present a continuation-based web application that runs entirely
-in the web browser (a single-page web application).</p>
+<h1>Sequential Web-Application Demo</h1>
+<p>This project demonstrates a web application that is programmed sequentially.
+Basically this means its structure mirrors its execution flow.
+Such sequential programming of a web application is radically different
+from the currently dominant style of web-application programming, but it should
+be remembered that the dominant style of programming for many (probably most)
+<em>offline</em> applications is sequential. The sequential style of programming is
+suitable for a wide range of applications and application programmers
+because it models a program after the stepwise logic used to complete a
+program's goal. The sequential style of programming is the easiest style to
+master, all things being equal, because it straightforwardly mirrors our
+thinking about what the program must do to fulfil its purpose.
+It is interesting to explore the possibility of writing web applications
+in a sequential style because the dominant, non-sequential styles
+make it difficult to follow execution flow through the program's code
+and thus complicate program development, testing, and refactoring.
+The discussion thread
+<a href="https://news.ycombinator.com/item?id=3510758">&quot;Node.js - A giant step backwards?&quot;</a>
+presents problems of a relatively new style of web-application
+programming, namely event-driven programming for the web server,
+that has become popular in the last few years.</p>
+<p>This README briefly explains how a traditional web application and a
+web application written in the newer event-driven style (<em>ala</em> Node.js) handle
+asynchronous events.
+Then it points out a working example of an application written for a
+continuation-based web server and online resources for learning important
+ideas about such applications. Finally it presents a continuation-based
+web application that runs entirely in the web browser--a single-page
+web application.</p>
 <h2>How Asynchronous Events Are Handled in Web Applications</h2>
-<p>Any program, simple or complex, that has I/O (user input or a disk read or
-write operation or transfer of data to or from another computer) must have a
-way of synchronizing with the completion of that I/O. For desktop applications,
+<p>Any program, simple or complex, that uses I/O (user I/O, disk reads,
+disk writes, or transfers of data between computers) must have a means of
+synchronizing itself with the completion of that I/O. For desktop applications,
 the operating system provides system calls, a scheduler, and library functions
-that allow the programmer to create a structure for his program that mirrors
-the flow of the program's execution. For desktop applications the waiting
+that allow the programmer to structure for his program to mirror
+the program's execution flow. For desktop applications, the waiting
 for completion of I/O can usually be neatly hidden within some function
 like read(), write(), getchar(), etc., but in most web applications written
-up to 2019, this mirroring is not possible because of the stateless nature of
-the web. Even most web applications that are written to run entirely in the
-web browser (a single-page web application) cannot mirror program flow
-because of the event-driven nature of JavaScript in the web browser.</p>
+up to 2019, this mirroring is not possible, due to the stateless nature of
+the web. Not even a web application written to run entirely in the
+web browser (a single-page web application) can mirror program flow,
+due to the event-driven nature of JavaScript in the web browser.</p>
 <p>In 2019, web servers can be classified as event-driven (like Node.js) and
-non-event-driven (the traditional web server). An event-driven web server
+non-event-driven (traditional web servers). An event-driven web server
 can react to many asynchronous events in real time, without holding up
 the main event loop.</p>
-<p>Web applications written for an event-driven web server and single-page
-web applications must be structured using callbacks, deferreds, promises,
-or some form of continuation-passing style. Thus, their struction cannot
-mirror their flow. However, a web application written using <em>true</em>
+<p>Web applications written for an event-driven web server and typical
+single-page web applications are structured using callbacks, deferreds,
+promises, or some form of continuation-passing style. Thus, their struction
+cannot mirror their flow. However, a web application written using <em>true</em>
 continuations <em>can</em> be structured to mirror its flow.</p>
-<h2>Traditional Web Applications vs. Continuation-Based Web Applications</h2>
+<h2>Traditional Web Applications vs. Web Applications Built upon Server-Side Web Continuations</h2>
 <p>Very often, web applications interact with the user by building request
-pages that pass information from web page to web page in cookies or
-hidden form fields, something like this:</p>
-<pre><code>    (define (sum query)
-      (build-request-page &quot;First number:&quot; &quot;/one&quot; &quot;&quot;))
-     
-    (define (one query)
-      (build-request-page &quot;Second number:&quot;
-			  &quot;/two&quot;
-			  (cdr (assq 'number query))))
-     
-    (define (two query)
-      (let ([n (string-&gt;number (cdr (assq 'hidden query)))]
-	    [m (string-&gt;number (cdr (assq 'number query)))])
-	`(html (body &quot;The sum is &quot; ,(number-&gt;string (+ m n))))))
-     
-    (hash-set! dispatch-table &quot;sum&quot; sum)
-    (hash-set! dispatch-table &quot;one&quot; one)
-    (hash-set! dispatch-table &quot;two&quot; two)
+pages that pass program state information from web page to web page in
+cookies or hidden form fields, something like this Racket Scheme code:</p>
+<pre><code>	(define (sum query)
+	  (build-request-page &quot;First number:&quot; &quot;/one&quot; &quot;&quot;))
+	 
+	(define (one query)
+	  (build-request-page &quot;Second number:&quot;
+			      &quot;/two&quot;
+			      (cdr (assq 'number query))))
+	 
+	(define (two query)
+	  (let ([n (string-&gt;number (cdr (assq 'hidden query)))]
+		[m (string-&gt;number (cdr (assq 'number query)))])
+	    `(html (body &quot;The sum is &quot; ,(number-&gt;string (+ m n))))))
+	 
+	(hash-set! dispatch-table &quot;sum&quot; sum)
+	(hash-set! dispatch-table &quot;one&quot; one)
+	(hash-set! dispatch-table &quot;two&quot; two)
 </code></pre>
-<p>This typical programming style of a web application is more
-complicated and unwieldy than just writing the same application
-straightforwardly like this:</p>
-<pre><code>    (define (sum2 query)
-      (define m (get-number &quot;First number:&quot;))
-      (define n (get-number &quot;Second number:&quot;))
-      `(html (body &quot;The sum is &quot; ,(number-&gt;string (+ m n)))))
+<p>That is the typical, traditional programming style of writing a web application.
+Such a style is more complicated and unwieldy than a straightforward style
+employing server-side web continuations:</p>
+<pre><code>	(define (sum2 query)
+	  (define m (get-number &quot;First number:&quot;))
+	  (define n (get-number &quot;Second number:&quot;))
+	  `(html (body &quot;The sum is &quot; ,(number-&gt;string (+ m n)))))
 </code></pre>
-<p>This latter version of the same web application was written using Racket's
-server-side web continuations. See the section &quot;11 Continuations&quot; of
-&quot;More: Systems Programming with Racket&quot; (https://docs.racket-lang.org/more/).</p>
-<h2>Server-Side Web Continuations</h2>
-<p>A continuation-based web server and web application that run in Racket
-Scheme are described at https://docs.racket-lang.org/more/ . (Racket is
-downloadable from https://download.racket-lang.org/ .) The finished
-Scheme code is at https://docs.racket-lang.org/more/step9.txt . It can
-be loaded and run in Racket something like this (where 8080 is the port
-number the server responds to):</p>
-<pre><code>    $ racket 
-    Welcome to Racket v7.5.
-    &gt; (enter! &quot;step9.txt&quot;)
-    &quot;step9.txt&quot;&gt; (serve 8080)
-    #&lt;procedure:...webcon/step9.txt:17:2&gt;
-    &quot;step9.txt&quot;&gt; 
+<p>Both the web server code and both versions of the application code are
+fully described in the section
+<a href="https://docs.racket-lang.org/more/#%28part._.Continuations%29">Continuations</a>
+of the page
+<a href="https://docs.racket-lang.org/more/#%28part._.Continuations%29">More: Systems Programming with Racket</a>.</p>
+<p>The reader is strongly encouraged to
+<a href="https://download.racket-lang.org/">download Racket</a>, load the
+<a href="https://docs.racket-lang.org/more/step9.txt">the finished Racket Scheme code</a>,
+and run the code--a five- to ten-minute exercise.
+The code can be loaded and run in Racket something like this (where 8080 is
+the port number to which the server responds and &quot;step9.txt&quot; is the full or
+relative pathname of the Racket Scheme code):</p>
+<pre><code>        $ racket
+        Welcome to Racket v7.5.
+        &gt; (enter! &quot;step9.txt&quot;)
+        &quot;step9.txt&quot;&gt; (serve 8080)
+        #&lt;procedure:...webcon/step9.txt:17:2&gt;
+        &quot;step9.txt&quot;&gt; 
 </code></pre>
-<p>After starting the program, you can use the web application locally
-by typing &quot;http://localhost:8080/sum2&quot; into your web browser's address
-bar. The program gets one number, jumps to a new web page (let's call it
-the second page)  where it asks for a second number, then jumps to a
-new web page (let's call it the third page) where it sums the two
-numbers. It stores continuations so it remembers the first number in
-case you press your browser's back button once or twice or retype the
-URL of the third or second page.</p>
-<p>Section 5.2 of Christian Queinnec's paper 'Inverting back the inversion
-of control or, Continuations versus page-centric programming' describes
-a very similar web application but does not detail its implementation.</p>
+<p>(<code>$</code> and <code>&gt;</code> are prompts.)
+After starting the program, you can use the web application locally
+by typing <a href="http://localhost:8080/sum2">http://localhost:8080/sum2</a>
+into your web browser's address bar.
+The program asks for and waits for one number, then jumps to a second web page,
+where it asks for and gets a second number, then jumps to a third web page,
+where it sums the two
+numbers. It stores continuations to remember the first and second numbers.
+In case the user presses his browser's back button once or twice or retypes the
+URL of the second or first page, the program recalls these numbers and
+presents them in input forms just like the forms where the user typed them.</p>
+<p>Section 5.2 of Christian Queinnec's paper
+<a href="https://pages.lip6.fr/Christian.Queinnec/PDF/www.pdf">'Inverting back the inversion of control or, Continuations versus page-centric programming'</a>
+describes a very similar web application but does not detail its implementation.</p>
 <h2>Client-Side Web Continuations</h2>
 <p>Server-side web continuations are interesting because of the simplification
-they provide to web applications. However, the memory that they consume
-can easily be a problem. Since each user of a website comes with his own
-web browser, it would be convenient to put the continuations in the browser.
-This way, a web application with 10,000 or 500,000 users is not burdened
+they provide for web applications. However, the memory that they consume
+can easily become a problem. Since each website user has his own
+web browser, it would be convenient to put the continuations in the browser,
+naturally scaling the application.
+This way, a web application with 10,000 or 1,000,000 users is not burdened
 by a heavy price of memory for continuations.
-This Git project demonstrates how a way to create a web application using
+This Git project demonstrates a way to create a web application using
 client-side continuations. It includes a submodule,
-https://github.com/tomelam/jsScheme, which provides the necessary code,
-and a test program, <code>sequential.txt</code>.  Here are instructions
-to run the application:</p>
+<a href="https://github.com/tomelam/jsScheme">jsScheme</a>,
+which provides the necessary code,
+and a test program, <code>sequential.txt</code>.</p>
+<p>The test program, apart from supporting functions and macros,
+is just this:</p>
+<pre><code>	(define (test)
+	  (with-handlers '((click-handler &quot;symbols&quot;))
+	    (let ((input (get-input)))
+	      (displayln &quot;get-input returned&quot;)
+	      (displayln input))))
+</code></pre>
+<p>The macro <code>with-handlers</code> sets up any number of
+event handlers (<code>click</code>, <code>mousedown</code>, <code>mouseup</code>, <code>mouseover</code>,
+<code>timeout</code>, etc.)
+and removes them when execution exits its block.
+The function <code>get-input</code> sets up a continuation that returns
+execution to that point only after an event has occurred.</p>
+<p>Here are instructions for running the application:</p>
 <ol>
 <li>
-<p>Clone the Git repository https://github.com/tomelam/sequential_web_app_demo .</p>
+<p>Clone the Git repository for
+<a href="https://github.com/tomelam/sequential_web_app_demo">the demo</a>.</p>
 </li>
 <li>
 <p>The Git submodule contains a file <code>scheme.html</code>. Open it in a
-web browser. You will see jsScheme's input textarea and its Log
-textarea. To the right of the input textarea are buttons <code>eval</code>,
-<code>clear input</code>, etc.</p>
+web browser, either as a file or as a URL. You will see jsScheme's input
+textarea and its <code>Log</code> textarea. To the right of the input textarea are
+buttons <code>eval</code>, <code>clear input</code>, etc.</p>
 </li>
 <li>
-<p>Press the 'library' button. The library will be copied into the input
+<p>Press the <code>library</code> button. The library will be copied into the input
 textarea.</p>
 </li>
 <li>
-<p>Press the 'eval' button. The library will be added to jsScheme's
+<p>Press the <code>eval</code> button. The library will be added to jsScheme's
 work environment and lots of stuff will be printed in the Log.</p>
 </li>
 <li>
-<p>Clear the input and log.</p>
+<p>Clear the <code>input</code> and <code>Log</code>.</p>
 </li>
 <li>
 <p>The cloned repository contains a file <code>sequential.txt</code>. Copy it
-into the input textarea.</p>
+into the <code>input</code> textarea.</p>
 </li>
 <li>
-<p>Press the 'eval' button. Lots of stuff will be printed in the Log.</p>
+<p>Press the <code>eval</code> button. Lots of stuff will be printed in the <code>Log</code>.</p>
 </li>
 <li>
-<p>Clear the input and log.</p>
+<p>Clear the <code>input</code> and <code>log</code>.</p>
 </li>
 <li>
-<p>Eval (reset (test)). In the Log the input should be
-echoed and <code>=&gt; #lambda</code> should be printed.</p>
+<p>Type <code>(reset (test))</code> into the input textarea, then press <code>eval</code>.</p>
 </li>
 <li>
-<p>Click on the TABLE element with ID 'symbols' (below the
-<code>work environment</code> and <code>core environment</code> links).</p>
+<p>Type the following into the <code>input</code> textarea, then press <code>eval</code>.
+In the <code>Log</code> the input will be echoed and <code>=&gt; #lambda</code> will be
+printed.</p>
 </li>
-<li>
-<p>Output from on-click-handler should return a value (probably a simple
-list) containing a symbol indicating which handler was triggered and
-any data from the JavaScript handler.</p>
-</li>
-<li>
-<p>Click on the TABLE element with ID 'symbols'. Confirm that no code is
-executed.</p>
-</li>
+</ol>
+<pre><code>	(define (test)
+	  (with-handlers '((click-handler &quot;symbols&quot;))
+	    (let ((input (get-input)))
+	      (displayln &quot;get-input returned&quot;)
+	      (displayln input))))
+
+	(reset (test))
+</code></pre>
+<ol start="10">
+<li>Click on the table on the right side of the page. (The table happens
+to have the ID <code>symbols</code>, so it is targeted by the <code>click</code> handler's
+event.) The following will be printed in the <code>Log</code>:</li>
+</ol>
+<pre><code>	get-input returned
+	(click #obj&lt;HTMLTableElement&gt;)
+</code></pre>
+<ol start="11">
+<li>Click on the table again. Confirm that nothing is added to the <code>Log</code>.
+This is because the click handler is automatically removed after the
+program progresses through the stage where it waits for the click.</li>
 </ol>

@@ -63,9 +63,3 @@
   (syntax-rules ()
     ((get-input)
      (shift c (set! input-listener-cont c)))))
-
-(define (test)
-  (with-handlers '((click-handler "symbols"))
-    (let ((input (get-input)))
-      (displayln "get-input returned")
-      (displayln input))))
