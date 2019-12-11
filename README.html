@@ -127,7 +127,7 @@ and a test program, <code>sequential.txt</code>.</p>
 <p>The test program, apart from supporting functions and macros,
 is just this:</p>
 <pre><code>	(define (test)
-	  (with-handlers '((click-handler &quot;symbols&quot;))
+	  (with-handlers '((click-handler &quot;foo&quot;))
 	    (let ((input (get-input)))
 	      (displayln &quot;get-input returned&quot;)
 	      (displayln input))))
@@ -189,8 +189,9 @@ printed.</p>
 	(𝙧𝙚𝙨𝙚𝙩 (𝙩𝙚𝙨𝙩))
 </code></pre>
 <ol start="10">
-<li>Click on the table on the right side of the page. (The table happens
-to have the ID <code>symbols</code>, so it is targeted by the <code>click</code> handler's
+<li>Click on the word 'Input' near the top of the page. (This word is
+enclosed in an HTML <!-- raw HTML omitted --> element having the ID <code>foo</code>,
+so it is targeted by the <code>click</code> handler's
 event.) The following will be printed in the <code>Log</code>:</li>
 </ol>
 <pre><code>	get-input returned
