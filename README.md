@@ -141,13 +141,12 @@ they provide for web applications. However, the memory that they consume
 can easily become a problem. Since each website user has his own
 web browser, it would be convenient to put the continuations in the browser,
 naturally scaling the application.
-This way, a web application with 10,000 or 1,000,000 users is not burdened
-by a heavy price of memory for continuations.
+This way, a web server serving the web application to 10,000 or 1,000,000
+users is not burdened by a heavy price of memory for continuations.
 This Git project demonstrates a way to create a web application using
-client-side continuations. It includes a submodule,
-[jsScheme](https://github.com/tomelam/jsScheme),
-which provides the necessary code,
-and a test program, ```sequential.txt```.
+client-side continuations. It includes
+[jsScheme](https://github.com/tomelam/jsScheme), a nearly complete
+implementation of R5RS Scheme language in JavaScript, as a submodule.
 
 The test program, apart from supporting functions and macros,
 is just this:
@@ -169,53 +168,38 @@ execution to that point only after an event has occurred.
 
 Here are instructions for running the application:
 
-1. Clone the Git repository for
-[the demo](https://github.com/tomelam/sequential_web_app_demo).
+1. Clone the Git repository for the demo:
+```
+	git clone --recurse-submodules git@github.com:tomelam/sequential_web_app_demo.git
+```
 
-2. The Git submodule contains a file ```scheme.html```. Open it in a
-web browser, either as a file or as a URL. You will see jsScheme's input
-textarea and its ```Log``` textarea. To the right of the input textarea are
-buttons ```eval```, ```clear input```, etc.
+2. The Git submodule ```jsScheme``` contains a file ```scheme.html```. Open it
+in a web browser, either as a file or as a URL. You will see jsScheme's
+```Input``` textarea and its ```Log``` textarea. To the right of the
+```Input``` textarea are buttons ```eval```, ```clear input```, and
+```clear log```.
 
-3. Press the ```library``` button. The library will be copied into the input
-textarea.
-
-4. Press the ```eval``` button. The library will be added to jsScheme's
-work environment and lots of stuff will be printed in the Log.
-
-5. Clear the ```input``` and ```Log```.
-
-6. The cloned repository contains a file ```sequential.txt```. Copy it
-into the ```input``` textarea.
-
-7. Press the ```eval``` button. Lots of stuff will be printed in the ```Log```.
-
-8. Clear the ```input``` and ```log```.
-
-9. Type ```(reset (test))``` into the input textarea, then press ```eval```.
-9. Type the following into the ```input``` textarea, then press ```eval```.
+3. Type the following into the ```Input``` textarea, then press ```eval```.
 In the ````Log```` the input will be echoed and ```=> #lambda``` will be
 printed.
 
 ```
-        (𝙙𝙚𝙛𝙞𝙣𝙚 (𝙩𝙚𝙨𝙩)
-	  (𝙬𝙞𝙩𝙝-𝙝𝙖𝙣𝙙𝙡𝙚𝙧𝙨 '((𝙘𝙡𝙞𝙘𝙠-𝙝𝙖𝙣𝙙𝙡𝙚𝙧 "𝙨𝙮𝙢𝙗𝙤𝙡𝙨"))
-	    (𝙡𝙚𝙩 ((𝙞𝙣𝙥𝙪𝙩 (𝙜𝙚𝙩-𝙞𝙣𝙥𝙪𝙩)))
-	      (𝙙𝙞𝙨𝙥𝙡𝙖𝙮𝙡𝙣 "𝙜𝙚𝙩-𝙞𝙣𝙥𝙪𝙩 𝙧𝙚𝙩𝙪𝙧𝙣𝙚𝙙")
-	      (𝙙𝙞𝙨𝙥𝙡𝙖𝙮𝙡𝙣 𝙞𝙣𝙥𝙪𝙩))))
-
-	(𝙧𝙚𝙨𝙚𝙩 (𝙩𝙚𝙨𝙩))
+	(reset
+	  (with-handlers '((click-handler "foo"))
+			 (let ((input (get-input)))
+			   (displayln "get-input returned")
+			   (displayln input))))
 ```
 
-10. Click on the word 'Input' near the top of the page. (This word is
-enclosed in an HTML <div> element having the ID ```foo```,
+4. Click on the word 'Input' near the top of the page. (This word is
+enclosed in an HTML ```<div>``` element having the ID ```foo```,
 so it is targeted by the ```click``` handler's
 event.) The following will be printed in the ```Log```:
 ```
 	get-input returned
-	(click #obj<HTMLTableElement>)
+	(click #obj<HTMLDivElement>)
 ```
 
-11. Click on the table again. Confirm that nothing is added to the `Log`.
+5. Click on the word 'Input' again. Confirm that nothing is added to the `Log`.
 This is because the click handler is automatically removed after the
 program falls through the `with-handlers` block.
