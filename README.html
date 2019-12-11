@@ -125,11 +125,11 @@ client-side continuations. It includes
 implementation of R5RS Scheme language in JavaScript, as a submodule.</p>
 <p>The test program, apart from supporting functions and macros,
 is just this:</p>
-<pre><code>	(define (test)
+<pre><code>	(reset
 	  (with-handlers '((click-handler &quot;foo&quot;))
-	    (let ((input (get-input)))
-	      (displayln &quot;get-input returned&quot;)
-	      (displayln input))))
+			 (let ((input (get-input)))
+			   (displayln &quot;get-input returned&quot;)
+			   (displayln input))))
 </code></pre>
 <p>The macro <code>with-handlers</code> sets up any number of
 event handlers (<code>click</code>, <code>mousedown</code>, <code>mouseup</code>, <code>mouseover</code>,
@@ -152,7 +152,7 @@ in a web browser, either as a file or as a URL. You will see jsScheme's
 <code>clear log</code>.</p>
 </li>
 <li>
-<p>Type the following into the <code>input</code> textarea, then press <code>eval</code>.
+<p>Type the following into the <code>Input</code> textarea, then press <code>eval</code>.
 In the <code>Log</code> the input will be echoed and <code>=&gt; #lambda</code> will be
 printed.</p>
 </li>

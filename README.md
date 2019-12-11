@@ -152,11 +152,11 @@ The test program, apart from supporting functions and macros,
 is just this:
 
 ```
-	(define (test)
+	(reset
 	  (with-handlers '((click-handler "foo"))
-	    (let ((input (get-input)))
-	      (displayln "get-input returned")
-	      (displayln input))))
+			 (let ((input (get-input)))
+			   (displayln "get-input returned")
+			   (displayln input))))
 ```
 
 The macro ```with-handlers``` sets up any number of
