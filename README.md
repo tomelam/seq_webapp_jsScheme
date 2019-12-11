@@ -122,12 +122,16 @@ After starting the program, you can use the web application locally
 by typing [http://localhost:8080/sum2](http://localhost:8080/sum2)
 into your web browser's address bar.
 The program asks for and waits for one number, then jumps to a second web page,
-where it asks for and gets a second number, then jumps to a third web page,
+where it asks for and waits for a second number, then jumps to a third web page,
 where it sums the two
-numbers. It stores continuations to remember the first and second numbers.
-In case the user presses his browser's back button once or twice or retypes the
-URL of the second or first page, the program recalls these numbers and
-presents them in input forms just like the forms where the user typed them.
+numbers. Along the way it stores continuations to remember its each halt
+after serving a page, even saving the first and second numbers.
+In case the user presses his browser's back button once or twice anywhere
+along the way, or retypes the URL of the second or first page, the program
+recalls its state when a number was typed into the respective page,
+and shows the number and again in its input form,
+just as the user originally typed it, and the user can change the number
+or accept it and continue the program as before.
 
 Section 5.2 of Christian Queinnec's paper
 ['Inverting back the inversion of control or, Continuations versus page-centric programming'](https://pages.lip6.fr/Christian.Queinnec/PDF/www.pdf)
