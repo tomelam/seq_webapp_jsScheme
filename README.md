@@ -154,7 +154,7 @@ is just this:
 
 ```
 	(define (test)
-	  (with-handlers '((click-handler "symbols"))
+	  (with-handlers '((click-handler "foo"))
 	    (let ((input (get-input)))
 	      (displayln "get-input returned")
 	      (displayln input))))
@@ -207,8 +207,9 @@ printed.
 	(𝙧𝙚𝙨𝙚𝙩 (𝙩𝙚𝙨𝙩))
 ```
 
-10. Click on the table on the right side of the page. (The table happens
-to have the ID ```symbols```, so it is targeted by the ```click``` handler's
+10. Click on the word 'Input' near the top of the page. (This word is
+enclosed in an HTML <div> element having the ID ```foo```,
+so it is targeted by the ```click``` handler's
 event.) The following will be printed in the ```Log```:
 ```
 	get-input returned
