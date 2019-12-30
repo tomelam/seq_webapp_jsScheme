@@ -157,7 +157,7 @@ is just this:
 
 ```
 	(reset
-	  (with-handlers '((click-handler "foo"))
+	  (with-handlers '((click-handler "#foo"))
 			 (let ((input (get-input)))
 			   (displayln "get-input returned")
 			   (displayln input))))
@@ -189,7 +189,7 @@ printed.
 
 ```
 	(reset
-	  (with-handlers '((click-handler "foo"))
+	  (with-handlers '((click-handler "#foo"))
 			 (let ((input (get-input)))
 			   (displayln "get-input returned")
 			   (displayln input))))

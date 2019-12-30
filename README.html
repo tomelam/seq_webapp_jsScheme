@@ -130,7 +130,7 @@ implementation of R5RS Scheme language in JavaScript, as a submodule.</p>
 <p>The test program, apart from supporting functions and macros,
 is just this:</p>
 <pre><code>	(reset
-	  (with-handlers '((click-handler &quot;foo&quot;))
+	  (with-handlers '((click-handler &quot;#foo&quot;))
 			 (let ((input (get-input)))
 			   (displayln &quot;get-input returned&quot;)
 			   (displayln input))))
@@ -162,7 +162,7 @@ printed.</p>
 </li>
 </ol>
 <pre><code>	(reset
-	  (with-handlers '((click-handler &quot;foo&quot;))
+	  (with-handlers '((click-handler &quot;#foo&quot;))
 			 (let ((input (get-input)))
 			   (displayln &quot;get-input returned&quot;)
 			   (displayln input))))
